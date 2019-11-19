@@ -1,0 +1,26 @@
+apiVersion: extensions/v1beta1
+kind: Ingress
+metadata:
+  annotations:
+    kubernetes.io/ingress.class: nginx-public
+    nginx.ingress.kubernetes.io/backend-protocol: HTTPS
+  labels:
+    role: pingfederate
+  name: pingfederate-ingress
+spec:
+  rules:
+  - host: pingfederate-${AWS_DEFAULT_PROFILE}.ping-devops.com
+    http:
+      paths:
+      - backend:
+          serviceName: pingfederate
+          servicePort: 9999
+        path: /pingfederate
+      - backend:
+          serviceName: pingfederate
+          servicePort: 9031
+        path: /
+  tls:
+  - hosts:
+    - pingfederate-${AWS_DEFAULT_PROFILE}.ping-devops.com
+    secretName: tls-secret
